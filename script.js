@@ -6,6 +6,8 @@ const products = [
     price: 499,
     supplyPrice: 160.36,
     sku: "19392_lala_friction_powered_truck_toy_1pc",
+    rating: 0,
+    reviews: [],
 
     images: [
         "images/image jcb-toy-1.jpg",
@@ -120,74 +122,172 @@ function productIllustration(product) {
 }
 
 function renderProducts() {
-    const visibleProducts = products.filter(product =>
-        activeFilter === "All" ||
-        product.category === activeFilter
-    );
+  const visibleProducts = products.filter(product =>
+    activeFilter === "All" ||
+    product.category === activeFilter
+  );
 
-    productGrid.innerHTML = visibleProducts.map(product => {
-        const images = product.images || [];
-        const light = product.colors?.[0] || "#f0e9d8";
+  productGrid.innerHTML = visibleProducts.map(product => {
+    const firstImage = product.images?.[0];
+    const light = product.colors?.[0] || "#edf0e6";
 
-        const gallery = images.length > 0
-            ? `
-                <div class="product-gallery">
-                    <div class="gallery-track">
-                        ${images.map((image, index) => `
-                            <img
-                                src="${image}"
-                                alt="${product.name} - Photo ${index + 1}"
-                                loading="lazy"
-                            >
-                        `).join("")}
-                    </div>
+    const imageContent = firstImage
+      ? `<img class="card-product-photo"
+               src="${firstImage}"
+               alt="${product.name}"
+               loading="lazy">`
+      : `<div class="visual">
+           ${productIllustration({
+             ...product,
+             colors: product.colors || ["#f0e9d8", "#b9a77c"],
+             icon: product.icon || "🛍️"
+           })}
+         </div>`;
 
-                    <span class="gallery-counter">
-                        1 / ${images.length}
-                    </span>
-                </div>
-            `
-            : `
-                <div class="visual">
-                    ${productIllustration({
-                        ...product,
-                        colors: product.colors || ["#f0e9d8", "#b9a77c"],
-                        icon: product.icon || "🛍️"
-                    })}
-                </div>
-            `;
+    return `
+      <article class="product-card" data-product="${product.id}">
+        <div class="product-image" style="background:${light}">
+          <span class="product-tag">${product.tag || ""}</span>
+          ${imageContent}
+          <button class="product-quick" data-add="${product.id}">
+            Add to cart +
+          </button>
+        </div>
 
-        return `
-            <article class="product-card">
-                <div class="product-image"
-                    style="background:${light}">
-
-                    <span class="product-tag">${product.tag || ""}</span>
-
-                    ${gallery}
-
-                    <button class="product-quick"
-                        data-add="${product.id}">
-                        Add to cart +
-                    </button>
-                </div>
-
-                <div class="product-meta">
-                    <div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <span class="product-category">
-                            ${product.category}
-                        </span>
-                    </div>
-
-                    <span class="product-price">
-                        ${money(product.price)}
-                    </span>
-                </div>
-            </article>
-        `;
-    }).join("");
+        <div class="product-meta">
+          <div>
+            <h3 class="product-name">${product.name}</h3>
+            <span class="product-category">${product.category}</span>
+            <div class="card-rating">
+              ${product.rating > 0
+                ? `★ ${product.rating} (${product.reviews?.length || 0} reviews)`
+                : "No reviews yet"}
+            </div>
+          </div>
+          <span class="product-price">${money(product.price)}</span>
+        </div>
+      </article>
+    `;
+  }).join("");
 }
+
+const productDetails = document.querySelector("#productDetails");
+const detailsBackdrop = document.querySelector("#detailsBackdrop");
+const detailsImageTrack = document.querySelector("#detailsImageTrack");
+const detailsCounter = document.querySelector("#detailsCounter");
+const detailsThumbnails = document.querySelector("#detailsThumbnails");
+
+let currentDetailProduct = null;
+
+function openProductDetails(productId) {
+  const product = products.find(item => item.id === productId);
+  if (!product) return;
+
+  currentDetailProduct = product;
+  const images = product.images || [];
+
+  document.querySelector("#detailCategory").textContent = product.category;
+  document.querySelector("#detailName").textContent = product.name;
+  document.querySelector("#detailPrice").textContent = money(product.price);
+  document.querySelector("#detailDescription").textContent =
+    product.description || "Product details will be added soon.";
+
+  const reviews = product.reviews || [];
+  const average = reviews.length
+    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+    : 0;
+
+  document.querySelector("#detailRating").textContent = reviews.length
+    ? `★ ${average.toFixed(1)} out of 5 · ${reviews.length} reviews`
+    : "No reviews yet";
+
+  detailsImageTrack.innerHTML = images.length
+    ? images.map((image, index) => `
+        <img src="${image}" alt="${product.name} photo ${index + 1}">
+      `).join("")
+    : `<div class="detail-description">Product photos coming soon.</div>`;
+
+  detailsThumbnails.innerHTML = images.map((image, index) => `
+    <button type="button" data-image-index="${index}"
+            class="${index === 0 ? "active" : ""}"
+            aria-label="View photo ${index + 1}">
+      <img src="${image}" alt="">
+    </button>
+  `).join("");
+
+  detailsCounter.textContent = images.length ? `1 / ${images.length}` : "0 / 0";
+
+  document.querySelector("#detailReviews").innerHTML = reviews.length
+    ? reviews.map(review => `
+        <div class="review-item">
+          <strong>${"★".repeat(Math.max(0, Math.min(5, review.rating)))}</strong>
+          <p>${review.text}</p>
+        </div>
+      `).join("")
+    : `<p class="detail-description">No customer reviews yet.</p>`;
+
+  productDetails.hidden = false;
+  detailsBackdrop.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closeProductDetails() {
+  productDetails.hidden = true;
+  detailsBackdrop.hidden = true;
+  document.body.style.overflow = "";
+}
+
+document.querySelector("#detailsClose").addEventListener("click", closeProductDetails);
+detailsBackdrop.addEventListener("click", closeProductDetails);
+
+productGrid.addEventListener("click", event => {
+  const addButton = event.target.closest("[data-add]");
+  if (addButton) {
+    event.stopPropagation();
+    addToCart(addButton.dataset.add);
+    return;
+  }
+
+  const card = event.target.closest("[data-product]");
+  if (card) openProductDetails(card.dataset.product);
+});
+
+detailsThumbnails.addEventListener("click", event => {
+  const button = event.target.closest("[data-image-index]");
+  if (!button) return;
+
+  const index = Number(button.dataset.imageIndex);
+  detailsImageTrack.scrollTo({
+    left: index * detailsImageTrack.clientWidth,
+    behavior: "smooth"
+  });
+
+  detailsThumbnails.querySelectorAll("button").forEach((thumb, i) => {
+    thumb.classList.toggle("active", i === index);
+  });
+});
+
+document.querySelector("#detailAddToCart").addEventListener("click", () => {
+  if (currentDetailProduct) {
+    addToCart(currentDetailProduct.id);
+    closeProductDetails();
+  }
+});
+
+detailsImageTrack.addEventListener("scroll", () => {
+  const images = detailsImageTrack.querySelectorAll("img");
+  if (!images.length || !detailsImageTrack.clientWidth) return;
+
+  const index = Math.round(
+    detailsImageTrack.scrollLeft / detailsImageTrack.clientWidth
+  );
+
+  detailsCounter.textContent = `${index + 1} / ${images.length}`;
+
+  detailsThumbnails.querySelectorAll("button").forEach((thumb, i) => {
+    thumb.classList.toggle("active", i === index);
+  });
+});
 
 function openCart() {
   document.body.classList.add("cart-open");

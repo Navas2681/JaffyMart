@@ -191,3 +191,202 @@ h1 em, h2 em { font-family: "Playfair Display", serif; font-weight: 500; }
     position: relative;
     overflow: hidden;
 }
+
+/* JaffyMart product details view */
+
+[hidden] {
+  display: none !important;
+}
+
+.product-card {
+  cursor: pointer;
+}
+
+.product-gallery {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.gallery-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  scroll-snap-align: start;
+}
+
+.product-card .product-quick {
+  z-index: 2;
+}
+
+.details-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #15251dcc;
+}
+
+.product-details {
+  position: fixed;
+  z-index: 41;
+  inset: 3vh 3vw;
+  overflow-y: auto;
+  background: var(--paper);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.details-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 35px;
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+.details-gallery {
+  min-width: 0;
+}
+
+.details-image-track {
+  display: flex;
+  aspect-ratio: 1 / 1;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  background: #edf0e6;
+  border-radius: 16px;
+}
+
+.details-image-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  scroll-snap-align: start;
+}
+
+.details-counter {
+  display: block;
+  margin: 8px 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.details-thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.details-thumbnails button {
+  flex: 0 0 65px;
+  height: 65px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 3px;
+  background: white;
+}
+
+.details-thumbnails button.active {
+  border: 2px solid var(--deep-green);
+}
+
+.details-thumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.details-info h2 {
+  font-size: clamp(25px, 3vw, 38px);
+  margin: 0 0 12px;
+}
+
+.detail-rating {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.detail-price {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+.detail-description,
+.detail-delivery {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.reviews-section {
+  border-top: 1px solid var(--line);
+  margin-top: 28px;
+  padding-top: 20px;
+}
+
+.reviews-section h3 {
+  font-size: 18px;
+}
+
+.review-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.review-item p {
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .product-details {
+    inset: 0;
+    border-radius: 0;
+    padding: 16px;
+  }
+
+  .details-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 20px;
+  }
+
+  .details-image-track {
+    max-height: 390px;
+  }
+}
+
+.card-product-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.card-rating {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 10px;
+}

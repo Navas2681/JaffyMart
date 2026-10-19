@@ -95,6 +95,48 @@
     <p class="footer-small">© <span id="year"></span> Everyday Finds. Store demo — replace sample details before launch.</p>
   </footer>
 
+  <!-- Product details window -->
+<div class="details-backdrop" id="detailsBackdrop" hidden></div>
+
+<section class="product-details" id="productDetails"
+         role="dialog" aria-modal="true"
+         aria-labelledby="detailName" hidden>
+
+  <div class="details-header">
+    <a class="logo" href="index.html">Jaffy<span>Mart</span></a>
+    <button class="icon-button" id="detailsClose"
+            aria-label="Close product details">✕</button>
+  </div>
+
+  <div class="details-content">
+    <div class="details-gallery">
+      <div class="details-image-track" id="detailsImageTrack"></div>
+      <span class="details-counter" id="detailsCounter">1 / 1</span>
+      <div class="details-thumbnails" id="detailsThumbnails"></div>
+    </div>
+
+    <div class="details-info">
+      <p class="eyebrow" id="detailCategory">PRODUCT</p>
+      <h2 id="detailName">Product name</h2>
+      <p class="detail-rating" id="detailRating">No reviews yet</p>
+      <p class="detail-price" id="detailPrice">₹0</p>
+      <p class="detail-description" id="detailDescription"></p>
+      <p class="detail-delivery">
+        Delivery details will be confirmed before ordering.
+      </p>
+
+      <button class="primary-button full-button" id="detailAddToCart">
+        Add to cart +
+      </button>
+
+      <div class="reviews-section">
+        <h3>Customer reviews</h3>
+        <div id="detailReviews"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
   <div class="cart-backdrop" id="cartBackdrop"></div>
   <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
     <div class="cart-header">
