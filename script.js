@@ -1,13 +1,27 @@
 const products = [
   {
-    id: "home-organizer",
-    name: "Everyday Desk Organizer",
-    category: "Home",
+    id: "C1P001",
+    name: "JCB Backhoe Loader Toy",
+    category: "Toys",
     price: 499,
-    tag: "SMART PICK",
-    icon: "▤",
-    colors: ["#d5dfc9", "#9aaa88"]
-  },
+    supplyPrice: 160.36,
+    sku: "19392_lala_friction_powered_truck_toy_1pc",
+
+    images: [
+        "images/image jcb-toy-1.jpg",
+        "images/image jcb-toy-2.jpg",
+        "images/image jcb-toy-3.jpg",
+        "images/image jcb-toy-5.jpg",
+        "images/image jcb-toy-4.jpg"
+    ],
+
+    tag: "BESTSELLER",
+    icon: "🚜",
+    colors: ["#f0e9d8", "#b9a77c"],
+
+    description: "Friction-powered construction toy for kids."
+},
+
   {
     id: "portable-blender",
     name: "Portable Mini Blender",
@@ -106,42 +120,73 @@ function productIllustration(product) {
 }
 
 function renderProducts() {
-  const visibleProducts = products.filter(product =>
-    activeFilter === "All" ||
-    product.category === activeFilter
-  );
+    const visibleProducts = products.filter(product =>
+        activeFilter === "All" ||
+        product.category === activeFilter
+    );
 
-  productGrid.innerHTML = visibleProducts.map(product => `
-    <article class="product-card">
-      <div class="product-image"
-        style="background:${product.colors[0]}">
+    productGrid.innerHTML = visibleProducts.map(product => {
+        const images = product.images || [];
+        const light = product.colors?.[0] || "#f0e9d8";
 
-        <span class="product-tag">${product.tag}</span>
+        const gallery = images.length > 0
+            ? `
+                <div class="product-gallery">
+                    <div class="gallery-track">
+                        ${images.map((image, index) => `
+                            <img
+                                src="${image}"
+                                alt="${product.name} - Photo ${index + 1}"
+                                loading="lazy"
+                            >
+                        `).join("")}
+                    </div>
 
-        <div class="visual">
-          ${productIllustration(product)}
-        </div>
+                    <span class="gallery-counter">
+                        1 / ${images.length}
+                    </span>
+                </div>
+            `
+            : `
+                <div class="visual">
+                    ${productIllustration({
+                        ...product,
+                        colors: product.colors || ["#f0e9d8", "#b9a77c"],
+                        icon: product.icon || "🛍️"
+                    })}
+                </div>
+            `;
 
-        <button class="product-quick"
-          data-add="${product.id}">
-          Add to cart +
-        </button>
-      </div>
+        return `
+            <article class="product-card">
+                <div class="product-image"
+                    style="background:${light}">
 
-      <div class="product-meta">
-        <div>
-          <h3 class="product-name">${product.name}</h3>
-          <span class="product-category">
-            ${product.category}
-          </span>
-        </div>
+                    <span class="product-tag">${product.tag || ""}</span>
 
-        <span class="product-price">
-          ${money(product.price)}
-        </span>
-      </div>
-    </article>
-  `).join("");
+                    ${gallery}
+
+                    <button class="product-quick"
+                        data-add="${product.id}">
+                        Add to cart +
+                    </button>
+                </div>
+
+                <div class="product-meta">
+                    <div>
+                        <h3 class="product-name">${product.name}</h3>
+                        <span class="product-category">
+                            ${product.category}
+                        </span>
+                    </div>
+
+                    <span class="product-price">
+                        ${money(product.price)}
+                    </span>
+                </div>
+            </article>
+        `;
+    }).join("");
 }
 
 function openCart() {
@@ -261,6 +306,30 @@ productGrid.addEventListener("click", event => {
     addToCart(button.dataset.add);
   }
 });
+
+// Update image counter when customers swipe
+productGrid.addEventListener("scroll", event => {
+  const track = event.target;
+
+  if (!track.classList.contains("gallery-track")) {
+    return;
+  }
+
+  const gallery = track.closest(".product-gallery");
+  const counter = gallery?.querySelector(".gallery-counter");
+
+  if (!counter || track.clientWidth === 0) {
+    return;
+  }
+
+  const currentIndex = Math.round(
+    track.scrollLeft / track.clientWidth
+  );
+
+  const totalImages = track.querySelectorAll("img").length;
+
+  counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+}, true);
 
 // Remove products from cart
 cartItems.addEventListener("click", event => {

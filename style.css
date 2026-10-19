@@ -135,3 +135,59 @@ h1 em, h2 em { font-family: "Playfair Display", serif; font-weight: 500; }
   .product-image { min-height: 260px; }
   .hero-art { min-height: 280px; }
 }
+
+/* JaffyMart swipeable product gallery */
+
+.product-gallery {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.gallery-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.gallery-track::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-track img {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    scroll-snap-align: start;
+}
+
+.gallery-counter {
+    position: absolute;
+    right: 10px;
+    bottom: 55px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* Keep product buttons above the gallery */
+.product-quick {
+    z-index: 2;
+}
+
+.product-image {
+    position: relative;
+    overflow: hidden;
+}
