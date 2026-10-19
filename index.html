@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Discover useful everyday products at great prices.">
+  <title>JaffyMart — Smart Finds for Everyday Life</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announcement">Simple finds. Everyday value. <span>Free shipping on selected orders</span></div>
+
+  <header class="site-header">
+    <a class="logo" href="index.html">Jaffy<span>Mart</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#shop">Shop</a>
+      <a href="#why-us">Why us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="cart-button" id="cartToggle" aria-label="Open shopping cart">
+      Cart <span id="cartCount" class="cart-count">0</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">THE EVERYDAY EDIT</p>
+        <h1>Small upgrades.<br><em>Better everyday.</em></h1>
+        <p class="hero-description">Useful finds for your home, your routine, and everything in between. Carefully picked, easy to shop.</p>
+        <a class="primary-button" href="#shop">Explore products <span aria-hidden="true">↗</span></a>
+        <div class="hero-note"><span class="note-dot"></span> A simple way to shop smarter</div>
+      </div>
+      <div class="hero-art" role="img" aria-label="Featured everyday products">
+        <div class="hero-glow"></div>
+        <div class="hero-label">THE DAILY<br>ESSENTIALS <span>✳</span></div>
+        <div class="hero-product product-one"><div class="mock-bottle"></div><span>01 / DAILY USE</span></div>
+        <div class="hero-product product-two"><div class="mock-organizer"></div><span>02 / SMART STORAGE</span></div>
+        <div class="hero-product product-three"><div class="mock-lamp"></div><span>03 / HOME FINDS</span></div>
+        <div class="hero-sticker">GOOD<br>FINDS<br>ONLY</div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Store features">
+      <div><span>01</span> Thoughtful picks</div>
+      <div><span>02</span> Clear pricing</div>
+      <div><span>03</span> Order updates</div>
+    </section>
+
+    <section class="shop-section" id="shop">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">A FEW GOOD FINDS</p>
+          <h2>Shop the highlights</h2>
+        </div>
+        <p>Explore our starter collection.<br>More finds coming soon.</p>
+      </div>
+      <div class="filter-row" role="group" aria-label="Filter products">
+        <button class="filter-chip active" data-filter="All">All products</button>
+        <button class="filter-chip" data-filter="Home">Home</button>
+        <button class="filter-chip" data-filter="Accessories">Accessories</button>
+        <button class="filter-chip" data-filter="Lifestyle">Lifestyle</button>
+      </div>
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="why-section" id="why-us">
+      <div>
+        <p class="eyebrow">WHY EVERYDAY FINDS</p>
+        <h2>Useful products.<br><em>No complicated shopping.</em></h2>
+      </div>
+      <div class="why-copy">
+        <p>We focus on practical products that make everyday routines a little easier. Browse, choose what you need, and get clear information before ordering.</p>
+        <div class="promise-list">
+          <div><span>✓</span> Product details before you buy</div>
+          <div><span>✓</span> Clear order communication</div>
+          <div><span>✓</span> Support when you need help</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter" id="contact">
+      <div>
+        <p class="eyebrow">QUESTIONS BEFORE YOU ORDER?</p>
+        <h2>We're here to help.</h2>
+        <p>Contact us for product information and order support.</p>
+      </div>
+      <a class="secondary-button" href="jaffymart@example.com">Email our team ↗</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="logo footer-logo" href="index.html">everyday<span>finds.</span></a>
+    <p>Thoughtful finds for everyday life.</p>
+    <p class="footer-small">© <span id="year"></span> Everyday Finds. Store demo — replace sample details before launch.</p>
+  </footer>
+
+  <div class="cart-backdrop" id="cartBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-header">
+      <div><p class="eyebrow">YOUR SELECTION</p><h2>Your cart</h2></div>
+      <button class="icon-button" id="cartClose" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+      <p>Shipping and final charges are confirmed at checkout.</p>
+      <button class="primary-button full-button" id="checkoutButton">Continue to checkout <span>→</span></button>
+      <p class="cart-note">Demo storefront: checkout is not connected yet.</p>
+    </div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
