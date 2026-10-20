@@ -581,3 +581,57 @@ h1 em, h2 em { font-family: "Playfair Display", serif; font-weight: 500; }
   outline: 2px solid #285c3b;
   outline-offset: 3px;
 }
+
+/* Customer avatar */
+.site-header .auth-trigger.is-avatar {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* Customer account menu */
+.account-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 10001;
+  width: 230px;
+  padding: 16px;
+  background: #fffdf6;
+  color: #243b2b;
+  border: 1px solid #e2e7df;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.account-menu[hidden] {
+  display: none;
+}
+
+.account-menu p {
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+
+.account-menu button {
+  width: 100%;
+  padding: 10px;
+  background: #285c3b;
+  color: #fffdf6;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.site-header {
+  position: relative;
+}

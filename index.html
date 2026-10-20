@@ -18,13 +18,23 @@
       <a href="#contact">Contact</a>
     </nav>
 
-    <button
+    <!-- Sign in button / customer avatar -->
+<button
   type="button"
   class="auth-trigger"
+  id="authTrigger"
   onclick="openJaffyMartAuth()"
 >
   Sign In
 </button>
+
+<!-- Account menu -->
+<div id="accountMenu" class="account-menu" hidden>
+  <p id="accountEmail">Welcome!</p>
+  <button type="button" id="signOutButton">
+    Sign Out
+  </button>
+</div>
 
     <button class="cart-button" id="cartToggle" aria-label="Open shopping cart">
       Cart <span id="cartCount" class="cart-count">0</span>
@@ -164,10 +174,6 @@
       <p class="cart-note">Demo storefront: checkout is not connected yet.</p>
     </div>
   </aside>
-
-  <button type="button" onclick="openJaffyMartAuth()">
-  Sign In / Register
-</button>
 
   <!-- JaffyMart Login / Registration -->
 <div id="authModal" class="auth-modal" style="display:none;">

@@ -72,7 +72,7 @@ const products = [
 ];
 
 // JaffyMart Supabase connection
-const SUPABASE_URL = "https://wkhbznnjeirsnadvngsl.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://wkhbznnjeirsnadvngsl.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3ybe0D92n8BwBQP5pFTrNw_XYwkWaBo";
 
 const supabaseClient = window.supabase.createClient(
@@ -593,8 +593,7 @@ authForm.addEventListener("submit", async (event) => {
         email,
         password,
         options: {
-          emailRedirectTo: window.location.origin +
-            window.location.pathname
+          emailRedirectTo: "https://navas2681.github.io/JaffyMart/"
         }
       });
     } else {
@@ -613,12 +612,15 @@ authForm.addEventListener("submit", async (event) => {
       authMessage.textContent =
         "Registration submitted! Check your email for the confirmation link before signing in.";
     } else {
-      authMessage.textContent = "Login successful!";
-      setTimeout(() => {
-        authModal.style.display = "none";
-        window.location.reload();
-      }, 800);
-    }
+  authMessage.textContent = "Welcome back to JaffyMart! 🛍️";
+
+  setTimeout(() => {
+    authModal.style.display = "none";
+    authForm.reset();
+    authMessage.textContent = "";
+  }, 1500);
+}
+
   } catch (error) {
     authMessage.textContent =
       "Something went wrong. Please check your connection and try again.";
@@ -626,4 +628,69 @@ authForm.addEventListener("submit", async (event) => {
   } finally {
     authSubmit.disabled = false;
   }
+});
+
+// JaffyMart customer account menu
+const authTrigger = document.getElementById("authTrigger");
+const accountMenu = document.getElementById("accountMenu");
+const accountEmail = document.getElementById("accountEmail");
+const signOutButton = document.getElementById("signOutButton");
+
+function showCustomerAccount(user) {
+  if (!user) {
+    authTrigger.textContent = "Sign In";
+    authTrigger.classList.remove("is-avatar");
+    authTrigger.title = "Sign in or register";
+    authTrigger.setAttribute("aria-label", "Sign in or register");
+    authTrigger.onclick = openJaffyMartAuth;
+    accountMenu.hidden = true;
+    return;
+  }
+
+  const email = user.email || "";
+  const initial = email.charAt(0).toUpperCase() || "?";
+
+  authTrigger.textContent = initial;
+  authTrigger.classList.add("is-avatar");
+  authTrigger.title = "Your account";
+  authTrigger.setAttribute("aria-label", "Open your account menu");
+
+  authTrigger.onclick = () => {
+    accountMenu.hidden = !accountMenu.hidden;
+  };
+
+  accountEmail.textContent = email;
+}
+
+// Restore the session when the page opens
+supabaseClient.auth.getSession().then(({ data, error }) => {
+  if (error) {
+    console.error("Could not restore session:", error.message);
+    return;
+  }
+
+  showCustomerAccount(data.session?.user || null);
+});
+
+// Keep the avatar updated after sign-in or sign-out
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  showCustomerAccount(session?.user || null);
+});
+
+// Sign out
+signOutButton.addEventListener("click", async () => {
+  signOutButton.disabled = true;
+
+  const { error } = await supabaseClient.auth.signOut();
+
+  signOutButton.disabled = false;
+
+  if (error) {
+    alert("Could not sign out. Please try again.");
+    console.error(error.message);
+    return;
+  }
+
+  accountMenu.hidden = true;
+  authMessage.textContent = "";
 });
