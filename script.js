@@ -149,9 +149,9 @@ function renderProducts() {
         <div class="product-image" style="background:${light}">
           <span class="product-tag">${product.tag || ""}</span>
           ${imageContent}
-          <button class="product-quick" data-add="${product.id}">
-            Add to cart +
-          </button>
+         <button class="product-quick" data-buy="${product.id}">
+          Buy Now →
+        </button>
         </div>
 
         <div class="product-meta">
@@ -274,6 +274,13 @@ document.querySelector("#detailAddToCart").addEventListener("click", () => {
   }
 });
 
+document.querySelector("#detailBuyNow").addEventListener("click", () => {
+  if (!currentDetailProduct) return;
+
+  addToCart(currentDetailProduct.id);
+  closeProductDetails();
+});
+
 detailsImageTrack.addEventListener("scroll", () => {
   const images = detailsImageTrack.querySelectorAll("img");
   if (!images.length || !detailsImageTrack.clientWidth) return;
@@ -322,6 +329,20 @@ function removeFromCart(productId) {
   renderCart();
 }
 
+function changeQuantity(productId, change) {
+  const item = cart.find(item => item.id === productId);
+
+  if (!item) return;
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    removeFromCart(productId);
+  } else {
+    renderCart();
+  }
+}
+
 function renderCart() {
   const totalItems = cart.reduce(
     (sum, item) => sum + item.quantity,
@@ -359,15 +380,27 @@ function renderCart() {
     return `
       <div class="cart-item">
         <div class="cart-thumb"
-          style="background:${product.colors[0]}">
-          ${product.icon}
-        </div>
+  style="background:${product.colors?.[0] || '#edf0e6'}">
+  ${
+    product.images?.[0]
+      ? `<img src="${product.images[0]}" alt="${product.name}">`
+      : (product.icon || "🛍️")
+  }
+</div>
 
         <div>
           <h3>${product.name}</h3>
-          <p>
-            ${money(product.price)} · Qty ${item.quantity}
-          </p>
+          <p>${money(product.price)} each</p>
+
+<div class="quantity-controls">
+  <button type="button" data-qty="${product.id}" data-change="-1"
+    aria-label="Decrease quantity">−</button>
+
+  <span>${item.quantity}</span>
+
+  <button type="button" data-qty="${product.id}" data-change="1"
+    aria-label="Increase quantity">+</button>
+</div>
 
           <button class="remove-item"
             data-remove="${product.id}">
@@ -398,12 +431,27 @@ document.querySelectorAll(".filter-chip")
     });
   });
 
-// Add products to cart
 productGrid.addEventListener("click", event => {
-  const button = event.target.closest("[data-add]");
+  const buyButton = event.target.closest("[data-buy]");
 
-  if (button) {
-    addToCart(button.dataset.add);
+  if (buyButton) {
+    event.stopPropagation();
+    addToCart(buyButton.dataset.buy);
+    return;
+  }
+
+  const addButton = event.target.closest("[data-add]");
+
+  if (addButton) {
+    event.stopPropagation();
+    addToCart(addButton.dataset.add);
+    return;
+  }
+
+  const card = event.target.closest("[data-product]");
+
+  if (card) {
+    openProductDetails(card.dataset.product);
   }
 });
 
@@ -438,6 +486,17 @@ cartItems.addEventListener("click", event => {
   if (button) {
     removeFromCart(button.dataset.remove);
   }
+});
+
+cartItems.addEventListener("click", event => {
+  const button = event.target.closest("[data-qty]");
+
+  if (!button) return;
+
+  changeQuantity(
+    button.dataset.qty,
+    Number(button.dataset.change)
+  );
 });
 
 // Cart controls
