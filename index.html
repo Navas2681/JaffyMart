@@ -17,6 +17,15 @@
       <a href="#why-us">Why us</a>
       <a href="#contact">Contact</a>
     </nav>
+
+    <button
+  type="button"
+  class="auth-trigger"
+  onclick="openJaffyMartAuth()"
+>
+  Sign In
+</button>
+
     <button class="cart-button" id="cartToggle" aria-label="Open shopping cart">
       Cart <span id="cartCount" class="cart-count">0</span>
     </button>
@@ -156,6 +165,39 @@
     </div>
   </aside>
 
-  <script src="script.js"></script>
+  <button type="button" onclick="openJaffyMartAuth()">
+  Sign In / Register
+</button>
+
+  <!-- JaffyMart Login / Registration -->
+<div id="authModal" class="auth-modal" style="display:none;">
+  <div class="auth-box">
+    <button type="button" id="closeAuth" aria-label="Close">✕</button>
+
+    <h2>Welcome to JaffyMart</h2>
+    <p>Sign in or create an account to continue shopping.</p>
+
+    <form id="authForm">
+      <label for="authEmail">Email address</label>
+      <input id="authEmail" type="email" required
+             placeholder="you@example.com">
+
+      <label for="authPassword">Password</label>
+      <input id="authPassword" type="password" required
+             minlength="6" placeholder="At least 6 characters">
+
+      <button type="submit" id="authSubmit">Create Account</button>
+    </form>
+
+    <p id="authMessage" role="status"></p>
+
+    <button type="button" id="toggleAuth">
+      Already registered? Sign in
+    </button>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
 </body>
 </html>

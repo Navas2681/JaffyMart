@@ -71,6 +71,14 @@ const products = [
   }
 ];
 
+// JaffyMart Supabase connection
+const SUPABASE_URL = "https://wkhbznnjeirsnadvngsl.supabase.co/rest/v1/";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3ybe0D92n8BwBQP5pFTrNw_XYwkWaBo";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 const productGrid = document.querySelector("#productGrid");
 const cartCount = document.querySelector("#cartCount");
 const cartToggle = document.querySelector("#cartToggle");
@@ -532,3 +540,90 @@ document.querySelector("#year").textContent =
 // Initial page rendering
 renderProducts();
 renderCart();
+
+// JaffyMart email authentication
+const authModal = document.getElementById("authModal");
+const authForm = document.getElementById("authForm");
+const authMessage = document.getElementById("authMessage");
+const authSubmit = document.getElementById("authSubmit");
+const toggleAuth = document.getElementById("toggleAuth");
+
+let isSignUpMode = true;
+
+// Open and close the login window
+function openJaffyMartAuth() {
+  authModal.style.display = "flex";
+  authMessage.textContent = "";
+}
+
+document.getElementById("closeAuth").addEventListener("click", () => {
+  authModal.style.display = "none";
+});
+
+// Switch between registration and sign-in
+toggleAuth.addEventListener("click", () => {
+  isSignUpMode = !isSignUpMode;
+
+  authSubmit.textContent = isSignUpMode
+    ? "Create Account"
+    : "Sign In";
+
+  toggleAuth.textContent = isSignUpMode
+    ? "Already registered? Sign in"
+    : "Need an account? Create one";
+
+  authMessage.textContent = "";
+});
+
+// Register or sign in
+authForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+
+  authSubmit.disabled = true;
+  authMessage.textContent = "Please wait...";
+
+  try {
+    let result;
+
+    if (isSignUpMode) {
+      result = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin +
+            window.location.pathname
+        }
+      });
+    } else {
+      result = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+    }
+
+    if (result.error) {
+      authMessage.textContent = result.error.message;
+      return;
+    }
+
+    if (isSignUpMode) {
+      authMessage.textContent =
+        "Registration submitted! Check your email for the confirmation link before signing in.";
+    } else {
+      authMessage.textContent = "Login successful!";
+      setTimeout(() => {
+        authModal.style.display = "none";
+        window.location.reload();
+      }, 800);
+    }
+  } catch (error) {
+    authMessage.textContent =
+      "Something went wrong. Please check your connection and try again.";
+    console.error(error);
+  } finally {
+    authSubmit.disabled = false;
+  }
+});
